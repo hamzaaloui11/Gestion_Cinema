@@ -13,6 +13,7 @@ public class Film {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;
+    private Double duree;
     private String realisateur;
     private String description;
     private String photo;

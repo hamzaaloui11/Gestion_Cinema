@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -103,7 +104,16 @@ public class CinemaServiceImpl implements ICinemaService{
 
     @Override
     public void UnitFilm() {
-
+        double [] duree=new double[]{1.5,2,2.5,3};
+        List<Categorie>categorieList=categorieRepo.findAll();
+            Stream.of("Game Of Throns","spider man","hary puter","batman" ).forEach(f->{
+                Film film=new Film();
+                film.setTitre(f);
+                film.setDuree(duree[new Random().nextInt(duree.length)]);
+                film.setPhoto(f.replace(" ",""));
+                film.setCategorie(categorieList.get(new Random().nextInt(categorieList.size())));
+                filmRepo.save(film);
+        });
     }
 
     @Override
