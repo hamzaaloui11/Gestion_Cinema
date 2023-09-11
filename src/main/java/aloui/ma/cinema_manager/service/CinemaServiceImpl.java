@@ -2,17 +2,20 @@ package aloui.ma.cinema_manager.service;
 
 import aloui.ma.cinema_manager.Dao.*;
 import aloui.ma.cinema_manager.entities.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
 
 @Service
+@Transactional
 public class CinemaServiceImpl implements ICinemaService{
     @Autowired
     private VilleRepo villeRepo;
@@ -30,6 +33,8 @@ public class CinemaServiceImpl implements ICinemaService{
     private FilmRepo filmRepo;
     @Autowired
     private FilmProjectionRepo filmProjectionRepo;
+    @Autowired
+    private TicketRepo ticketRepo;
     @Override
     public void UnitVilles() {
         Stream.of("casablanca","Beni Mellal","Azilal","Marrakech").forEach(v->{
@@ -82,7 +87,7 @@ public class CinemaServiceImpl implements ICinemaService{
     @Override
     public void UnitSeance() {
         DateFormat dateFormat=new SimpleDateFormat("HH:mm");
-        Stream.of("12:00","15:00","17:00","19:OO","21:00").forEach(s->{
+        Stream.of("12:00","15:00","17:00","19:00","21:00").forEach(s->{
             Seance seance=new Seance();
             try {
                 seance.setHeureDebut(dateFormat.parse(s));
@@ -118,11 +123,37 @@ public class CinemaServiceImpl implements ICinemaService{
 
     @Override
     public void UnitFilmProjection() {
-
+        double [] prices=new double[] {30,50,60,70,90, 100};
+        villeRepo.findAll().forEach(ville -> {
+            ville.getCinemas().forEach(cinema -> {
+                cinema.getSalles().forEach(salle -> {
+                    filmRepo.findAll().forEach(film -> {
+                        seanceRepo.findAll().forEach(seance -> {
+                            FilmProjection filmProjection=new FilmProjection();
+                            filmProjection.setDateProjection(new Date());
+                            filmProjection.setFilm(film);
+                            filmProjection.setPrix (prices [new Random() .nextInt (prices.length)]);
+                            filmProjection.setSalle(salle);
+                            filmProjection.setSeance(seance);
+                            filmProjectionRepo.save(filmProjection);
+                        });
+                    });
+                });
+            });
+        });
     }
 
     @Override
     public void UnitTicket() {
-
+        filmProjectionRepo.findAll().forEach(p->{
+            p.getSalle().getPlaces().forEach(place -> {
+                Ticket ticket=new Ticket();
+                ticket.setProjection(p);
+                ticket.setPlace(place);
+                ticket.setPrix(p.getPrix());
+                ticket.setReserver(false);
+                ticketRepo.save(ticket);
+            });
+        });
     }
 }
