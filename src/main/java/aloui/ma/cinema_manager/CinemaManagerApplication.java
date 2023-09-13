@@ -17,6 +17,7 @@ public class CinemaManagerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        /*
         iCinemaService.UnitVilles();
         iCinemaService.UnitCinemas();
         iCinemaService.UnitSalles();
@@ -26,5 +27,7 @@ public class CinemaManagerApplication implements CommandLineRunner {
         iCinemaService.UnitFilm();
         iCinemaService.UnitFilmProjection();
         iCinemaService.UnitTicket();
+
+         */
     }
 }
