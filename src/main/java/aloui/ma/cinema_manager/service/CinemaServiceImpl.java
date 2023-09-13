@@ -111,11 +111,11 @@ public class CinemaServiceImpl implements ICinemaService{
     public void UnitFilm() {
         double [] duree=new double[]{1.5,2,2.5,3};
         List<Categorie>categorieList=categorieRepo.findAll();
-            Stream.of("Game Of Throns","spider man","hary puter","batman" ).forEach(f->{
+            Stream.of("Game of throns","spider man","hary puter","batman" ).forEach(f->{
                 Film film=new Film();
                 film.setTitre(f);
                 film.setDuree(duree[new Random().nextInt(duree.length)]);
-                film.setPhoto(f.replace(" ",""));
+                film.setPhoto(f.replace(" ","")+".jpg");
                 film.setCategorie(categorieList.get(new Random().nextInt(categorieList.size())));
                 filmRepo.save(film);
         });
